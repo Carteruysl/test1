@@ -96,12 +96,44 @@ public class Tests
             {
                 YearMonth = "202504",
                 Amount = 3000
+            },
+            new Budget
+            {
+                YearMonth = "202505",
+                Amount = 620
             }
         });
 
         var budgetService = new BudgetService(budgetRepo);
         var start = new DateTime(2025, 3, 29);
-        var end = new DateTime(2025, 4, 2);
+        var end = new DateTime(2025, 5, 2);
+        var budget = budgetService.Query(start, end);
+
+        Assert.AreEqual(budget, 3070);
+    }
+    
+    [Test]
+    public void Get_leap_month_Budget()
+    {
+        var budgetRepo = Substitute.For<IBudgetRepo>();
+
+        budgetRepo.GetAll().Returns(new List<Budget>
+        {
+            new Budget
+            {
+                YearMonth = "202402",
+                Amount = 290
+            },
+            new Budget
+            {
+                YearMonth = "202403",
+                Amount = 3100
+            }
+        });
+
+        var budgetService = new BudgetService(budgetRepo);
+        var start = new DateTime(2024, 2, 27);
+        var end = new DateTime(2024, 3, 02);
         var budget = budgetService.Query(start, end);
 
         Assert.AreEqual(budget, 230);
